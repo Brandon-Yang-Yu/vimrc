@@ -39,6 +39,7 @@ set shiftwidth=4
 " Search Options
 set hlsearch
 set ignorecase
+set incsearch
 
 " User Interface Options
 set laststatus=2
