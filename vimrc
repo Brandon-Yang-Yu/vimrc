@@ -35,6 +35,7 @@ call plug#end()
 set expandtab
 set tabstop=4
 set shiftwidth=4
+set softtabstop=4
 
 " Search Options
 set hlsearch
@@ -57,6 +58,9 @@ set foldnestmax=3
 set history=1000
 syntax enable
 filetype plugin indent on
+
+" Show cmd
+set showcmd
 
 " Theme
 colorscheme molokai
