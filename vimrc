@@ -133,3 +133,4 @@ let g:lsp_settings = {
 \}
 
 nnoremap <leader>d '"_d'
+nnoremap <leader>ff :FZF<CR>
