@@ -16,9 +16,6 @@ Plug 'timonv/vim-cargo'            " Cargo integration for Rust
 " Git integration
 Plug 'tpope/vim-fugitive'          " Git wrapper for vim
 
-" Commented out plugins (uncomment as needed):
-" Plug 'github/copilot.vim'        " GitHub Copilot support
-
 call plug#end()
 
 " ==============================================================================
