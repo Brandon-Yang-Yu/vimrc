@@ -43,6 +43,12 @@ set number                         " Show line numbers
 set relativenumber                 " Show relative line numbers
 set showcmd                        " Show command in bottom bar
 
+" Additional performance settings
+set scrolljump=5                   " Jump 5 lines when scrolling off screen
+set sidescroll=1                   " Smooth horizontal scrolling
+set updatetime=300                 " Faster completion and diagnostics
+set timeoutlen=500                 " Faster key sequence timeout
+
 " Code folding settings
 set foldmethod=indent              " Fold based on indentation
 set foldnestmax=3                  " Maximum fold nesting level
@@ -50,8 +56,16 @@ set foldnestmax=3                  " Maximum fold nesting level
 " General settings
 set history=1000                   " Remember more commands and search history
 set encoding=utf-8                 " Set default encoding
+
+" Performance optimizations for syntax highlighting
+set synmaxcol=200                  " Limit syntax highlighting to 200 columns for performance
+set ttyfast                        " Fast terminal connection for smoother rendering
+set lazyredraw                     " Don't redraw while executing macros (performance)
 syntax enable                      " Enable syntax highlighting
 filetype plugin indent on         " Enable file type detection, plugins, and indentation
+
+" Reduce regex engine overhead for better performance
+set regexpengine=1                 " Use old regex engine for better performance
 
 " Theme
 colorscheme molokai                " Set color scheme
