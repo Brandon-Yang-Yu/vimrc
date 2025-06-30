@@ -1,136 +1,102 @@
+" ==============================================================================
+" PLUGIN MANAGEMENT (vim-plug)
+" ==============================================================================
+
 call plug#begin()
-" make sure you use single quotes
-"
-" " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-" Plug 'junegunn/vim-easy-align'
-"
-" " Any valid git URL is allowed
-" Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-"
-" " Multiple Plug commands can be written in a single line using | separators
-" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-"
-" " On-demand loading
-" Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-" Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-Plug 'sheerun/vim-polyglot'
-Plug 'github/copilot.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'timonv/vim-cargo'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-"autocmd FileType python Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
-"
-" " Unmanaged plugin (manually installed and updated)
-" Plug '~/my-prototype-plugin'
-"
-" " Initialize plugin system
-" " - Automatically executes `filetype plugin indent on` and `syntax enable`.
+
+" Syntax highlighting and language support
+Plug 'sheerun/vim-polyglot'        " Enhanced syntax highlighting for many languages
+
+" File searching and navigation
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }  " Fuzzy file finder
+
+" Rust development
+Plug 'timonv/vim-cargo'            " Cargo integration for Rust
+
+" Git integration
+Plug 'tpope/vim-fugitive'          " Git wrapper for vim
+
+" Commented out plugins (uncomment as needed):
+" Plug 'github/copilot.vim'        " GitHub Copilot support
+
 call plug#end()
-" " You can revert the settings after the call like so:
 
-" Indention Options
-set expandtab
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+" ==============================================================================
+" BASIC VIM SETTINGS
+" ==============================================================================
 
-" Search Options
-set hlsearch
-set ignorecase
-set incsearch
+" Indentation settings
+set expandtab                      " Use spaces instead of tabs
+set tabstop=4                      " Number of spaces that a <Tab> in the file counts for
+set shiftwidth=4                   " Number of spaces to use for each step of autoindent
+set softtabstop=4                  " Number of spaces that a <Tab> counts for while editing
+inoremap <Tab> <Space><Space><Space><Space>  " Insert 4 spaces when Tab is pressed
 
-" User Interface Options
-set laststatus=2
-set ruler
-set wildmenu
-set cursorline
-set number
-set relativenumber
+" Search settings
+set hlsearch                       " Highlight all search matches
+set ignorecase                     " Case-insensitive search
+set incsearch                      " Show search matches as you type
 
-" Code Folding Options
-set foldmethod=indent
-set foldnestmax=3
+" User interface settings
+set laststatus=2                   " Always show status line
+set ruler                          " Show cursor position in status line
+set wildmenu                       " Enhanced command-line completion
+set cursorline                     " Highlight current line
+set number                         " Show line numbers
+set relativenumber                 " Show relative line numbers
+set showcmd                        " Show command in bottom bar
 
-" Miscellaneous Options
-set history=1000
-syntax enable
-filetype plugin indent on
+" Code folding settings
+set foldmethod=indent              " Fold based on indentation
+set foldnestmax=3                  " Maximum fold nesting level
 
-" Show cmd
-set showcmd
+" General settings
+set history=1000                   " Remember more commands and search history
+set encoding=utf-8                 " Set default encoding
+syntax enable                      " Enable syntax highlighting
+filetype plugin indent on         " Enable file type detection, plugins, and indentation
 
 " Theme
-colorscheme molokai
+colorscheme molokai                " Set color scheme
 
-"au BufNewFile,BufRead *.py
-au FileType *.py
-    \ set tabstop=4
-    \ set softtabstop=4
-    \ set shiftwidth=4
-    \ set textwidth=80
-    \ set expandtab
-    \ set autoindent
+" Project-specific path
+set path+=/Users/yy/Project/UNP/unpv13e/**  " Add UNP project to search path
+
+" ==============================================================================
+" FILE TYPE SPECIFIC SETTINGS
+" ==============================================================================
+
+" Python files
+au FileType python
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=80 |
+    \ set expandtab |
+    \ set autoindent |
     \ set fileformat=unix
 
-au FileType *.js, *.html, *.css
-    \ set tabstop=2
-    \ set softtabstop=2
+" Web development files (JavaScript, HTML, CSS)
+au FileType javascript,html,css
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
     \ set shiftwidth=2
 
-au FileType *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+" Highlight trailing whitespace for Python and C files
+au FileType python,c,cpp match BadWhitespace /\s\+$/
 
-set encoding=utf-8
+" ==============================================================================
+" KEY MAPPINGS
+" ==============================================================================
 
-" vim-lsp and  Python language server
-if executable('pylsp')
-    " pip install python-lsp-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pylsp',
-        \ 'cmd': {server_info->['pylsp']},
-        \ 'allowlist': ['python'],
-        \ 'completor': function('asyncomplete#complete')
-        \ })
-endif
+" Delete to void register (doesn't overwrite clipboard)
+nnoremap <leader>d "_d
 
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
-    nmap <buffer> K <plug>(lsp-hover)
-
-    let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
-    
-    " refer to doc to add more commands
-endfunction
-
-augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-
-let g:lsp_settings = {
-\   'pylsp-all': {
-\       'workspace_config': {
-\           'pylsp': {
-\               'configurationSources': ['flake8'],
-\           },
-\       },
-\   },
-\}
-
-nnoremap <leader>d '"_d'
+" FZF file finder
 nnoremap <leader>ff :FZF<CR>
+
+" Git integration
+nnoremap <leader>gg :Git<CR>
+
+" Open terminal
+nnoremap <leader>tt :term<CR>
